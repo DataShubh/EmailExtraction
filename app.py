@@ -5,6 +5,7 @@ from urllib.parse import urlsplit
 from collections import deque
 from bs4 import BeautifulSoup
 import pandas as pd
+from email_validator import validate_email, EmailNotValidError
 
 app = Flask(__name__)
 
@@ -55,8 +56,18 @@ def index():
                     if not link.endswith(".gz"):
                         if not link in unscraped and not link in scraped:
                             unscraped.append(link)
+
+            my_dict={}
+        
+           for email in emails:    
+                try:
+                    emailObject= validate_email(email)
+                    email = emailObject.email
+                    my_dict[email] = "Email Address is Valild"
+                except EmailNotValidError as e:
+                    my_dict[email] = str(e)                
+        return render_template('result.html', my_dict=my_dict)
                                 
-        return render_template('result.html', emails=emails)
     return render_template('index.html')
 
 if __name__ == '__main__':
