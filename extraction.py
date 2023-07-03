@@ -4,6 +4,7 @@ from urllib.parse import urlsplit
 from collections import deque
 from bs4 import BeautifulSoup
 import pandas as pd
+from email_validator import validate_email, EmailNotValidError
 original_url = input("Enter the website url: ") 
 
 unscraped = deque([original_url])  
@@ -54,6 +55,15 @@ while len(unscraped):
 
 
 print(emails)
+#Checking whether email address exists or not
+for email in emails:    
+    try:
+      emailObject= validate_email(email)
+      email = emailObject.email
+      print(email, "Email is Valid")
+    except EmailNotValidError as e:
+      print(email, "is:" ,str(e))
+
 #df = pd.DataFrame(emails, columns=["Email"])
 #df.to_csv('email.csv', index=False)
 
